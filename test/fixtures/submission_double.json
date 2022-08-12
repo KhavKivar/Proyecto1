@@ -1,0 +1,14 @@
+{
+    "idSubmission": 131,
+    "title": "test title",
+    "description": "test description",
+    "tags": ["tag1","tag2"],
+    "upVote": 10,
+    "downVote": 0,
+    "state": "state",
+    "imageUrl": "img.cl",
+    "idUser": "a31",
+    "userName": "Username",
+    "date": "1312-12-12"
+}
+
