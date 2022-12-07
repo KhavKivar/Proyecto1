@@ -33,3 +33,15 @@ const double PADDING_VERTICAL = 10;
 const double BORDER_RADIUS_BIG = 25;
 const double BORDER_RADIUS_NORMAL = 15;
 const double BORDER_RADIUS_SMALL = 5;
+
+//Strings
+
+const String textLoading = "loading..";
+
+const Map<String, String> tagToImg = {
+  "todas las categorias": "",
+  "vivienda": "assets/images/casa.png",
+  "seguridad": "assets/images/guard.png",
+  "deporte": "assets/images/triangulo.png",
+  "espacios publicos": "assets/images/edificio.png"
+};

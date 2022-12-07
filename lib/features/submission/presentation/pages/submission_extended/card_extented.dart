@@ -23,7 +23,6 @@ class CardSubmissionDetailsWidget extends StatelessWidget {
             Container(
               child: Column(children: [
                 Text(submission.title),
-                Tags(submission.tags),
                 Text(submission.description),
               ]),
             )

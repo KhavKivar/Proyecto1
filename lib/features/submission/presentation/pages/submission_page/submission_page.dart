@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tuterritorio/core/const.dart';
 import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/home_page/home_page.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/submission_page/top_section.dart';
@@ -16,8 +17,10 @@ class SubmissionPage extends StatefulWidget {
 }
 
 class _SubmissionPageState extends State<SubmissionPage> {
-  final String textLoading = "loading..";
   late ScrollController _controller;
+
+  late List<Submission> submissions;
+  late List<Submission> filterSubmissions;
 
   final double containerHeightValue = 45.0;
   late var containerHeight = containerHeightValue;
@@ -74,17 +77,19 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 child: Categories()),
             BlocBuilder<SubmissionBloc, SubmissionState>(
                 builder: (context, state) {
+              print("new state");
               if (state is Loaded) {
+                submissions = state.submissions;
                 return Expanded(
                   child: ListView.builder(
                       controller: _controller,
-                      itemCount: state.submissions.length,
+                      itemCount: state.filterSubmissions.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return Container(
                           height: 250,
                           child: CardSubmission(
-                            submission: state.submissions[index],
+                            submission: state.filterSubmissions[index],
                           ),
                         );
                       }),

@@ -21,14 +21,30 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
       emit(Loading());
       final Either<Failure, List<Submission>> failureOrSubmissions =
           await getSubmission();
-      await Future.delayed(Duration(seconds: 1));
 
       failureOrSubmissions.fold((l) {
         print("error");
         emit(Error(message: SERVER_FAILURE_MESSAGE));
       }, (r) {
-        emit(Loaded(submissions: r));
+        emit(Loaded(submissions: r, filterSubmissions: r));
       });
+    });
+
+    on<FilterSubmissionsEvents>((event, emit) async {
+      final String word = event.wordToSearch.toLowerCase();
+      final List<Submission> submissions = event.submissions;
+
+      if (word.isNotEmpty) {
+        final List<Submission> filterList = submissions
+            .where((element) => element.title.toLowerCase().startsWith(word))
+            .toList();
+        print(event.submissions.length);
+        print(filterList.length);
+        emit(Loaded(
+            submissions: event.submissions, filterSubmissions: filterList));
+      } else {
+        emit(Loaded(submissions: submissions, filterSubmissions: submissions));
+      }
     });
   }
 }

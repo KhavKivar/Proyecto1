@@ -8,3 +8,11 @@ abstract class SubmissionEvent extends Equatable {
 }
 
 class GetSubmissions extends SubmissionEvent {}
+
+class FilterSubmissionsEvents extends SubmissionEvent {
+  const FilterSubmissionsEvents(
+      {required this.submissions, required this.wordToSearch});
+
+  final String wordToSearch;
+  final List<Submission> submissions;
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tuterritorio/core/const.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
@@ -13,6 +14,8 @@ import 'features/submission/presentation/widgets/card_submission.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.black));
   runApp(const AppState());
 }
 
@@ -24,7 +27,7 @@ class AppState extends StatelessWidget {
       BlocProvider(
         create: (_) => sl<SubmissionBloc>(),
       )
-    ], child: MyApp());
+    ], child: const MyApp());
   }
 }
 

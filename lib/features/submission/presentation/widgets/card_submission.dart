@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:tuterritorio/core/const.dart';
+import 'package:tuterritorio/core/plataform/strings_capitalize.dart';
 import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
 import 'package:tuterritorio/features/submission/presentation/widgets/tags.dart';
 
@@ -20,115 +21,144 @@ class CardSubmission extends StatelessWidget {
           arguments: submission,
         );
       },
-      child: Container(
-        width: 300,
-        child: Card(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      submission.imageUrl,
-                    ))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: CachedNetworkImage(
+        imageUrl: submission.imageUrl,
+        placeholder: (context, url) => Container(
+            width: 300, child: Center(child: CircularProgressIndicator())),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        imageBuilder: (context, imageProvider) => Container(
+          width: 300,
+          child: Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: CachedNetworkImageProvider(
+                        submission.imageUrl,
+                      ))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 5),
+                            child: TextPrimary(
+                              fontSize: SMALL_SIZE_TEXT,
+                              text: "${submission.upVote} Interesados",
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: LikeButton(
+                              likeBuilder: (bool isLiked) {
+                                return Icon(
+                                  Icons.favorite_rounded,
+                                  color:
+                                      isLiked ? Colors.redAccent : Colors.grey,
+                                  size: 25,
+                                );
+                              },
+                              likeCountPadding: const EdgeInsets.only(),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: submission.tags
+                              .map((e) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 3.0),
+                                    child: Tag(
+                                        tag: e.capitalize(),
+                                        img: tagToImg[e] ??
+                                            "todas las categorias"),
+                                  ))
+                              .toList(),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 5),
-                          child: TextPrimary(
-                            fontSize: SMALL_SIZE_TEXT,
-                            text: "${submission.upVote} Interesados",
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 8.0, bottom: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.white,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextPrimary(
+                                  text: submission.title,
+                                  fontSize: NORMAL_SIZE_TEXT,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/avatar.png',
+                                          fit: BoxFit.scaleDown,
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        TextPrimary(
+                                          text: "Lorem Isum",
+                                          fontSize: SMALL_SIZE_TEXT,
+                                        ),
+                                      ],
+                                    ),
+                                    TextGrey(
+                                      text: submission.date,
+                                      fontSize: SMALL_SIZE_TEXT,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: LikeButton(
-                            likeBuilder: (bool isLiked) {
-                              return Icon(
-                                Icons.favorite_rounded,
-                                color: isLiked ? Colors.redAccent : Colors.grey,
-                                size: 25,
-                              );
-                            },
-                            likeCountPadding: const EdgeInsets.only(),
-                          ),
-                        ),
-                      )
                     ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextPrimary(
-                            text: submission.title,
-                            fontSize: NORMAL_SIZE_TEXT,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/avatar.png',
-                                    fit: BoxFit.scaleDown,
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  TextPrimary(
-                                    text: "Lorem Isum",
-                                    fontSize: SMALL_SIZE_TEXT,
-                                  ),
-                                ],
-                              ),
-                              TextGrey(
-                                text: submission.date,
-                                fontSize: SMALL_SIZE_TEXT,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 5,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 5,
         ),
       ),
     );

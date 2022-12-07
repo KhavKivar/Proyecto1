@@ -15,6 +15,7 @@ class TextPrimary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
+        maxLines: 1,
         style: TextStyle(
             color: DARK_GRAY,
             fontSize: fontSize,

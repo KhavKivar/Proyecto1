@@ -1,56 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:tuterritorio/core/const.dart';
+import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
 
-class Tags extends StatelessWidget {
-  const Tags(List<String> this.tags, {Key? key})
-      : assert(
-          tags != null,
-          'A non-null List<String> must be provided to the Tags constructor.',
-        ),
-        super(key: key);
-  final List<String> tags;
+class Tag extends StatelessWidget {
+  const Tag({Key? key, required this.tag, required this.img}) : super(key: key);
+  final String tag;
+  final String img;
 
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8.0,
-      children: tags.map((tag) => _Tag(tagName: tag)).toList(),
-    );
-  }
-}
-
-class _Tag extends StatelessWidget {
-  const _Tag({Key? key, required this.tagName}) : super(key: key);
-  final String tagName;
   @override
   Widget build(BuildContext context) {
     return Chip(
-      backgroundColor: Colors.amber,
+      padding: EdgeInsets.zero,
       avatar: CircleAvatar(
-        backgroundColor: Colors.white,
-        child: const Text('icon'),
+        backgroundImage: AssetImage(img),
       ),
-      label: Text(
-        tagName,
-        style: TextStyle(color: Colors.white),
+      label: TextPrimary(
+        text: tag,
+        fontSize: SMALL_SIZE_TEXT,
       ),
     );
   }
 }
-/*
-
- Row(
-      children: [
-        Container(
-          height: 10.0,
-          width: 10.0,
-          decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        Text(tagName),
-      ],
-    ); */

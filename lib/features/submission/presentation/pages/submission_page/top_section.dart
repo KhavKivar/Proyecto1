@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tuterritorio/core/const.dart';
 import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/features/submission/data/models/submission_data.dart';
+import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
+import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
 
 class SearchWidget extends StatelessWidget {
-  const SearchWidget({Key? key}) : super(key: key);
+  SearchWidget({Key? key}) : super(key: key);
 
   final double radius = 25;
-  final String textSearch = "Buscar..";
+  final String textSearch = "Buscar...";
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,24 +23,42 @@ class SearchWidget extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.search,
-                  color: DARK_GRAY,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                TextGrey(
-                  text: textSearch,
-                  fontSize: NORMAL_SIZE_TEXT,
-                )
-              ],
+            Expanded(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: DARK_GRAY,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) {
+                        final SubmissionState state =
+                            context.read<SubmissionBloc>().state;
+                        if (state is Loaded) {
+                          final List<Submission> submissions =
+                              state.submissions;
+                          context.read<SubmissionBloc>().add(
+                              FilterSubmissionsEvents(
+                                  submissions: submissions,
+                                  wordToSearch: value));
+                        }
+                      },
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: textSearch,
+                          isDense: true),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Icon(
               Icons.filter_list_rounded,
@@ -57,6 +80,7 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
   int selectTag = 0;
+
   List<String> tags = [
     "Todas las categorias",
     "Vivienda",

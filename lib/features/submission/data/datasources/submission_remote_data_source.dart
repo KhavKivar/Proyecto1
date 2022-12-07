@@ -32,6 +32,7 @@ class SubmissionRemoteDataSourceImpl implements SubmissionRemoteDataSource {
           'Content-Type': 'application/json',
         },
       ).timeout(Duration(seconds: 5));
+
       if (response.statusCode == 200) {
         return List<SubmissionModel>.from(
             json.decode(response.body).map((x) => SubmissionModel.fromJson(x)));
