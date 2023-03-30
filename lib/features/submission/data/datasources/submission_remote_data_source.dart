@@ -40,6 +40,7 @@ class SubmissionRemoteDataSourceImpl implements SubmissionRemoteDataSource {
         throw ServerException();
       }
     } catch (e) {
+      print("error $e");
       throw ServerException();
     }
   }

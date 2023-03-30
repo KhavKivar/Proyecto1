@@ -33,18 +33,73 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
     on<FilterSubmissionsEvents>((event, emit) async {
       final String word = event.wordToSearch.toLowerCase();
       final List<Submission> submissions = event.submissions;
-
+      final OrderBy orderBy = event.orderBy;
+      final Categories category = event.categories;
+      //Firstly, we filter the list by word
+      //Then we filter that list depend on filter that user has choose
+      List<Submission> filterListGivenAWord =
+          List<Submission>.from(submissions);
       if (word.isNotEmpty) {
-        final List<Submission> filterList = submissions
+        filterListGivenAWord = submissions
             .where((element) => element.title.toLowerCase().startsWith(word))
             .toList();
         print(event.submissions.length);
-        print(filterList.length);
+        print(filterListGivenAWord.length);
+        List<Submission> filterList =
+            filterListGivenX(filterListGivenAWord, orderBy, category);
         emit(Loaded(
-            submissions: event.submissions, filterSubmissions: filterList));
+            submissions: event.submissions,
+            filterSubmissions: filterList,
+            orderBy: event.orderBy,
+            category: category));
       } else {
-        emit(Loaded(submissions: submissions, filterSubmissions: submissions));
+        List<Submission> filterList =
+            filterListGivenX(event.submissions, orderBy, category);
+        emit(Loaded(
+            submissions: event.submissions,
+            filterSubmissions: filterList,
+            orderBy: event.orderBy,
+            category: category));
       }
     });
   }
 }
+
+Map<Categories, String> categoryToString = {
+  Categories.all: "todas las categorias",
+  Categories.housing: "vivienda",
+  Categories.security: "seguridad",
+  Categories.sports: "deporte",
+  Categories.publicSpace: "espacios publicos"
+};
+
+List<Submission> filterListGivenX(List<Submission> filterListGivenAWord,
+    OrderBy orderBy, Categories categories) {
+  List<Submission> filterList = filterListGivenAWord;
+  // OrderBy
+  switch (orderBy) {
+    case OrderBy.news:
+      filterList.sort((a, b) => a.date.compareTo(b.date));
+      break;
+    case OrderBy.popular:
+      filterList.sort((a, b) => b.upVote.compareTo(a.upVote));
+      break;
+    default:
+      break;
+  }
+  // By Categories
+  switch (categories) {
+    case Categories.all:
+      break;
+    default:
+      filterList = filterList
+          .where(
+              (element) => element.tags.contains(categoryToString[categories]))
+          .toList();
+      break;
+  }
+
+  return filterList;
+}
+
+// 

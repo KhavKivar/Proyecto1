@@ -6,9 +6,11 @@ import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
 import 'package:tuterritorio/features/submission/data/models/submission_data.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
-import 'package:tuterritorio/features/submission/presentation/pages/home_page/top_section.dart';
+import 'package:tuterritorio/features/submission/presentation/pages/home_page/section/bottom_section.dart';
+import 'package:tuterritorio/features/submission/presentation/pages/home_page/const/const.dart';
+import 'package:tuterritorio/features/submission/presentation/pages/home_page/section/top_section.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/home_page/utils.dart';
-import 'package:tuterritorio/features/submission/presentation/widgets/card_submission.dart';
+import 'package:tuterritorio/features/submission/presentation/widgets/card_submission_widget/card_submission.dart';
 import 'package:tuterritorio/inject_container.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -20,9 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String textRecentBallots = "Encuestas recientes";
-  final String textSeeMore = "Ver mas";
-
   @override
   void initState() {
     super.initState();
@@ -33,48 +32,46 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         body: SafeArea(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
+        padding: const EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             TopSection(),
-            BlocBuilder<SubmissionBloc, SubmissionState>(
-                builder: (context, state) {
-              if (state is Empty) {
-                context.read<SubmissionBloc>().add(GetSubmissions());
-                return MessageDisplay(message: 'Start searching');
-              } else if (state is Loading) {
-                return LoadingWidget();
-              } else if (state is Loaded) {
-                return Flexible(
-                    child: ViewCard(
-                  submissions: state.submissions,
-                  scrollType: Axis.horizontal,
-                ));
-              } else if (state is Error) {
-                return MessageDisplay(message: state.message);
-              }
-              return SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: const Placeholder(),
-              );
-            }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextPrimary(
-                  text: textRecentBallots,
-                  fontSize: NORMAL_SIZE_TEXT,
-                ),
-                TextBlue(
-                  text: textSeeMore,
-                )
-              ],
-            ),
+            SubmissionListCardWidget(),
+            BottomSection(),
           ],
         ),
       ),
     ));
+  }
+}
+
+class SubmissionListCardWidget extends StatelessWidget {
+  const SubmissionListCardWidget({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SubmissionBloc, SubmissionState>(
+        builder: (context, state) {
+      if (state is Empty) {
+        context.read<SubmissionBloc>().add(GetSubmissions());
+
+        return const MessageDisplay(message: textStartSearch);
+      } else if (state is Loading) {
+        return const LoadingWidget();
+      } else if (state is Loaded) {
+        return Flexible(
+            child: ViewCard(
+          submissions: state.submissions,
+          scrollType: Axis.horizontal,
+        ));
+      } else if (state is Error) {
+        return MessageDisplay(message: state.message);
+      }
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 3,
+        child: const Placeholder(),
+      );
+    });
   }
 }
 
@@ -86,8 +83,8 @@ class ViewCard extends StatelessWidget {
   final Axis scrollType;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 250,
+    return SizedBox(
+      height: heightSubmissionCard,
       child: ListView.builder(
           scrollDirection: scrollType,
           itemCount: submissions.length,
