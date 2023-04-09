@@ -1,13 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:like_button/like_button.dart';
-import 'package:tuterritorio/core/const.dart';
+import 'package:tuterritorio/core/presentation/bloc/theme_switch_bloc.dart';
+import 'package:tuterritorio/core/presentation/bloc/theme_switch_state.dart';
+import 'package:tuterritorio/core/theme/const.dart';
 import 'package:tuterritorio/core/plataform/strings_capitalize.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
+import 'package:tuterritorio/core/theme/theme.dart';
 import 'package:tuterritorio/features/submission/presentation/widgets/card_submission_widget/tags.dart';
+import 'package:tuterritorio/main.dart';
 
 import '../../../domain/entities/submission.dart';
-import 'const.dart';
+import 'utils.dart';
 
 class CardSubmission extends StatelessWidget {
   const CardSubmission({Key? key, required this.submission}) : super(key: key);
@@ -23,9 +28,9 @@ class CardSubmission extends StatelessWidget {
         );
       },
       child: CachedNetworkImage(
-        imageUrl: submission.imageUrl,
+        imageUrl: submission.imageUrl[0],
         placeholder: (context, url) {
-          return const SizedBox(
+          return SizedBox(
               width: widthContainer,
               child: Center(child: CircularProgressIndicator()));
         },
@@ -40,34 +45,52 @@ class CardSubmission extends StatelessWidget {
   }
 }
 
-class CardSubmissionBody extends StatelessWidget {
+class CardSubmissionBody extends StatefulWidget {
   const CardSubmissionBody({Key? key, required this.submission})
       : super(key: key);
   final Submission submission;
+
+  @override
+  State<CardSubmissionBody> createState() => _CardSubmissionBodyState();
+}
+
+class _CardSubmissionBodyState extends State<CardSubmissionBody> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: widthContainer,
       child: Card(
+        margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(
-                    submission.imageUrl,
-                  ))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CardTopContent(submission: submission),
-              Column(
-                children: [
-                  CardTagContent(submission: submission),
-                  CardInfoContent(submission: submission),
-                ],
-              )
-            ],
+        child: BlocListener<ThemeBloc, ThemeState>(
+          listener: (context, state) {
+            setState(() {});
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: isDark(context)
+                        ? ColorFilter.mode(Colors.black26, BlendMode.darken)
+                        : null,
+                    image: CachedNetworkImageProvider(
+                      widget.submission.imageUrl[0],
+                    ))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CardTopContent(submission: widget.submission),
+                Column(
+                  children: [
+                    CardTagContent(
+                      tags: widget.submission.tags,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                    ),
+                    CardInfoContent(submission: widget.submission),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
         shape: RoundedRectangleBorder(
@@ -97,7 +120,7 @@ class CardInfoContent extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(BORDER_RADIUS_SMALL),
-          color: Colors.white,
+          color: isDark(context) ? SURFACE_COLOR_DARK : BACKGROUND_COLOR,
         ),
         child: Padding(
           padding: const EdgeInsets.all(PADDING_DEFAULT),
@@ -118,8 +141,8 @@ class CardInfoContent extends StatelessWidget {
                       Image.asset(
                         defaultAvatarSrc,
                         fit: BoxFit.scaleDown,
-                        width: avatarWidth,
-                        height: avatarHeight,
+                        width: avatarWidthMedium,
+                        height: avatarHeightMedium,
                       ),
                       const SizedBox(
                         width: PADDING_VERTICAL,
@@ -144,37 +167,6 @@ class CardInfoContent extends StatelessWidget {
   }
 }
 
-class CardTagContent extends StatelessWidget {
-  const CardTagContent({
-    Key? key,
-    required this.submission,
-  }) : super(key: key);
-
-  final Submission submission;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: PADDING_DEFAULT),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: submission.tags.map((e) {
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: PADDING_DEFAULT_DIV_2),
-            child: Tag(
-                tag: e.capitalize(),
-                img: tagDataBuilder
-                        .firstWhere((element) => element.nameOnUI == e)
-                        .associatedDataOnUI ??
-                    defaultErrorTag),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
 class CardTopContent extends StatelessWidget {
   const CardTopContent({
     Key? key,
@@ -192,7 +184,7 @@ class CardTopContent extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: isDark(context) ? SURFACE_COLOR_DARK : BACKGROUND_COLOR,
               borderRadius: BorderRadius.circular(BORDER_RADIUS_SMALL),
             ),
             child: Padding(
@@ -200,14 +192,14 @@ class CardTopContent extends StatelessWidget {
                   vertical: PADDING_DEFAULT_DIV_2 + 1,
                   horizontal: PADDING_DEFAULT_DIV_2 + 1),
               child: Text(
-                "${submission.upVote} Interesados",
+                "${submission.upVote}" " " + textLikes,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
           ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: isDark(context) ? SURFACE_COLOR_DARK : BACKGROUND_COLOR,
               borderRadius: BorderRadius.circular(BORDER_RADIUS_BIG),
             ),
             child: Padding(

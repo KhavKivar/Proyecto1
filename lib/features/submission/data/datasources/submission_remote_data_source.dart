@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:tuterritorio/core/const.dart';
+import 'package:tuterritorio/core/theme/const.dart';
 import 'package:tuterritorio/core/error/exceptions.dart';
 import 'package:tuterritorio/core/error/failures.dart';
 import 'package:tuterritorio/features/submission/data/models/submission_data.dart';
@@ -31,9 +31,10 @@ class SubmissionRemoteDataSourceImpl implements SubmissionRemoteDataSource {
         headers: {
           'Content-Type': 'application/json',
         },
-      ).timeout(Duration(seconds: 5));
+      );
 
       if (response.statusCode == 200) {
+        await Future.delayed(Duration(seconds: 3));
         return List<SubmissionModel>.from(
             json.decode(response.body).map((x) => SubmissionModel.fromJson(x)));
       } else {

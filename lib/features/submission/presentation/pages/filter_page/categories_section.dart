@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tuterritorio/core/const.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/core/theme/const.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/filter_page/filter_page.dart';
+import 'package:tuterritorio/main.dart';
 
 import '../../bloc/submission_bloc.dart';
-import 'const/const.dart';
+import 'utils/utils.dart';
 
 class CategoriesSectionFilter extends StatefulWidget {
   const CategoriesSectionFilter({Key? key}) : super(key: key);
@@ -122,7 +123,11 @@ class CategoryWidget extends StatelessWidget {
       side: isPainted
           ? const BorderSide(width: 1, color: SECONDARY_COLOR)
           : const BorderSide(width: 1, color: PRIMARY_COLOR),
-      backgroundColor: isPainted ? SECONDARY_COLOR : Colors.white,
+      backgroundColor: isPainted
+          ? SECONDARY_COLOR
+          : isDark(context)
+              ? SURFACE_COLOR_DARK
+              : BACKGROUND_COLOR,
     );
   }
 }

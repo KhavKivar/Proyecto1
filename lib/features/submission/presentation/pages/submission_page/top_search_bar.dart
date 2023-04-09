@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tuterritorio/core/const.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/core/theme/const.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
 import 'package:tuterritorio/features/submission/data/models/submission_data.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
-
-import 'const/const.dart';
+import 'package:tuterritorio/main.dart';
 
 class SearchBar extends StatelessWidget {
   SearchBar({Key? key}) : super(key: key);
@@ -54,9 +53,11 @@ class SearchWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(BORDER_RADIUS_BIG),
-        color: Colors.white,
-        boxShadow: const [
-          BoxShadow(color: Colors.grey, spreadRadius: 1),
+        color: isDark(context) ? BACKGROUND_COLOR_DARK : BACKGROUND_COLOR,
+        boxShadow: [
+          BoxShadow(
+              color: isDark(context) ? TEXT_COLOR_DARK : Colors.grey,
+              spreadRadius: 1),
         ],
       ),
       child: Padding(
@@ -68,9 +69,9 @@ class SearchWidget extends StatelessWidget {
             Expanded(
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.search,
-                    color: PRIMARY_COLOR,
+                    color: isDark(context) ? TEXT_COLOR_DARK : PRIMARY_COLOR,
                   ),
                   const SizedBox(
                     width: PADDING_DEFAULT,
@@ -96,9 +97,9 @@ class SearchWidget extends StatelessWidget {
                   routeSubmissionFilter,
                 );
               },
-              child: const Icon(
+              child: Icon(
                 Icons.filter_list_rounded,
-                color: PRIMARY_COLOR,
+                color: isDark(context) ? TEXT_COLOR_DARK : PRIMARY_COLOR,
               ),
             )
           ],
@@ -125,15 +126,15 @@ class SearchBarTitleWidget extends StatelessWidget {
               onTap: () {
                 Navigator.maybePop(context);
               },
-              child: const Icon(
+              child: Icon(
                 Icons.arrow_back,
-                color: PRIMARY_COLOR,
+                color: isDark(context) ? TEXT_COLOR_DARK : PRIMARY_COLOR,
               ),
             ),
           ),
           Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.headlineSmall,
           )
         ],
       ),

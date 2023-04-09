@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tuterritorio/core/const.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/core/theme/const.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/filter_page/filter_page.dart';
+import 'package:tuterritorio/main.dart';
 
-import 'const/const.dart';
+import 'utils/utils.dart';
 
 class OrderBySectionFilter extends StatefulWidget {
   const OrderBySectionFilter({Key? key}) : super(key: key);
@@ -112,7 +113,11 @@ class OrderChip extends StatelessWidget {
           children: [
             Container(
                 decoration: BoxDecoration(
-                  color: isPainted ? SECONDARY_COLOR : Colors.white,
+                  color: isPainted
+                      ? SECONDARY_COLOR
+                      : isDark(context)
+                          ? SURFACE_COLOR_DARK
+                          : BACKGROUND_COLOR,
                   borderRadius: BorderRadius.circular(BORDER_RADIUS_BIG),
                   border: Border.all(
                     width: 1.5,
@@ -124,7 +129,11 @@ class OrderChip extends StatelessWidget {
                   padding: const EdgeInsets.all(PADDING_DEFAULT_DIV_2),
                   child: Icon(
                     iconData,
-                    color: isPainted ? Colors.white : PRIMARY_COLOR,
+                    color: isPainted
+                        ? Colors.white
+                        : isDark(context)
+                            ? TEXT_COLOR_DARK
+                            : PRIMARY_COLOR,
                   ),
                 )),
             Center(
@@ -133,7 +142,7 @@ class OrderChip extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: isPainted
-                    ? Theme.of(context).textTheme.displaySmall
+                    ? Theme.of(context).textTheme.titleMedium
                     : Theme.of(context).textTheme.titleSmall,
               ),
             )

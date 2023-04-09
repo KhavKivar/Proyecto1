@@ -1,12 +1,5 @@
 import 'package:tuterritorio/core/plataform/builder_app_data.dart';
 
-const double widthContainer = 300;
-const String defaultAvatarSrc = 'assets/images/avatar.png';
-const String userName = "Lorem Isum";
-const double avatarWidth = 30;
-const double avatarHeight = 30;
-const String defaultErrorTag = "todas las categorias";
-
 class TagDataBuilder extends BuilderAppData {
   TagDataBuilder(nameOnUI, associatedDataOnUI)
       : super(nameOnUI, associatedDataOnUI);

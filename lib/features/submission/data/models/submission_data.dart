@@ -11,7 +11,7 @@ class SubmissionModel extends Submission {
       required int upVote,
       required int downVote,
       required String state,
-      required String imageUrl,
+      required List<String> imageUrl,
       required String idUser,
       required String userName,
       required String date})
@@ -55,7 +55,7 @@ class SubmissionModel extends Submission {
       upVote: map['upVote']?.toInt() ?? 0,
       downVote: map['downVote']?.toInt() ?? 0,
       state: map['state'] ?? '',
-      imageUrl: map['imageUrl'] ?? '',
+      imageUrl: List<String>.from(map['imageUrl'] ?? []),
       idUser: map['idUser'] ?? '',
       userName: map['userName'] ?? '',
       date: map['date'] ?? '',

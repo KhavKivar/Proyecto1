@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tuterritorio/core/const.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
-
-import '../const/const.dart';
+import 'package:tuterritorio/core/theme/const.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
 
 class TopSection extends StatelessWidget {
   const TopSection({Key? key}) : super(key: key);
@@ -18,11 +16,11 @@ class TopSection extends StatelessWidget {
             children: [
               Text(
                 textWelcome,
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               Text(
                 textUserName,
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
@@ -30,7 +28,7 @@ class TopSection extends StatelessWidget {
             assetDefaultAvatar,
             fit: BoxFit.scaleDown,
             width: avatarWidth,
-            height: avatarHeight,
+            height: avatarWidth,
           ),
         ],
       ),
@@ -53,7 +51,7 @@ class TopSection extends StatelessWidget {
             },
             child: Text(
               textSeeMore,
-              style: Theme.of(context).textTheme.displayMedium,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           )
         ],

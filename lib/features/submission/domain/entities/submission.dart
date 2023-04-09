@@ -8,7 +8,7 @@ class Submission extends Equatable {
   int upVote;
   int downVote;
   String state;
-  String imageUrl;
+  List<String> imageUrl = [];
   String idUser;
   String userName;
   String date;

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tuterritorio/core/const.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/core/presentation/bloc/theme_switch_bloc.dart';
+import 'package:tuterritorio/core/presentation/bloc/theme_switch_event.dart';
+import 'package:tuterritorio/core/presentation/bloc/theme_switch_state.dart';
+import 'package:tuterritorio/core/theme/const.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
+import 'package:tuterritorio/core/theme/theme.dart';
 import 'package:tuterritorio/features/submission/data/models/submission_data.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/home_page/section/bottom_section.dart';
-import 'package:tuterritorio/features/submission/presentation/pages/home_page/const/const.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/home_page/section/top_section.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/home_page/utils.dart';
 import 'package:tuterritorio/features/submission/presentation/widgets/card_submission_widget/card_submission.dart';
 import 'package:tuterritorio/inject_container.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tuterritorio/main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,19 +34,30 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            TopSection(),
-            SubmissionListCardWidget(),
-            BottomSection(),
-          ],
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final bloc = context.read<ThemeBloc>();
+            if (isDark(context)) {
+              bloc.add(ThemeChanged(theme: ThemeAppEnum.light));
+            } else {
+              bloc.add(ThemeChanged(theme: ThemeAppEnum.dark));
+            }
+          },
+          child: Icon(Icons.add),
         ),
-      ),
-    ));
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TopSection(),
+                SubmissionListCardWidget(),
+                BottomSection(),
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -90,8 +105,14 @@ class ViewCard extends StatelessWidget {
           itemCount: submissions.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            return CardSubmission(
-              submission: submissions[index],
+            return Padding(
+              padding: EdgeInsets.only(
+                  right: PADDING_DEFAULT,
+                  top: PADDING_DEFAULT_DIV_2,
+                  bottom: PADDING_DEFAULT_DIV_2),
+              child: CardSubmission(
+                submission: submissions[index],
+              ),
             );
           }),
     );

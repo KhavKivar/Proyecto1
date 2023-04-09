@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tuterritorio/core/const.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/core/theme/const.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/home_page/home_page.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/submission_page/top_search_bar.dart';
 import 'package:tuterritorio/features/submission/presentation/widgets/card_submission_widget/card_submission.dart';
 import 'dart:developer' as developer;
-
-import 'const/const.dart';
 
 class SubmissionPage extends StatefulWidget {
   const SubmissionPage({Key? key}) : super(key: key);
@@ -33,6 +31,10 @@ class _SubmissionPageState extends State<SubmissionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {},
+      ),
       body: SafeArea(
           child: Column(
         children: [SearchBar(), SubmissionVerticalList()],
@@ -86,20 +88,27 @@ class _SubmissionVerticalListState extends State<SubmissionVerticalList> {
                             TitleSearchSub(
                               listLength: state.filterSubmissions.length,
                             ),
-                            SizedBox(
-                              height: heightSubmissionCard,
-                              width: double.infinity,
-                              child: CardSubmission(
-                                submission: state.filterSubmissions[index],
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  bottom: PADDING_DEFAULT),
+                              child: SizedBox(
+                                height: heightSubmissionCard,
+                                width: double.infinity,
+                                child: CardSubmission(
+                                  submission: state.filterSubmissions[index],
+                                ),
                               ),
                             )
                           ],
                         );
                       }
-                      return SizedBox(
-                        height: heightSubmissionCard,
-                        child: CardSubmission(
-                          submission: state.filterSubmissions[index],
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: PADDING_DEFAULT),
+                        child: SizedBox(
+                          height: heightSubmissionCard,
+                          child: CardSubmission(
+                            submission: state.filterSubmissions[index],
+                          ),
                         ),
                       );
                     });
@@ -128,7 +137,7 @@ class TitleSearchSub extends StatelessWidget {
             bottom: PADDING_DEFAULT_DIV_2,
             left: PADDING_DEFAULT_DIV_2),
         child: Text(
-          "$listLength propuestas encontradas",
+          "$listLength" " " + textSubFound,
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),

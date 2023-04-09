@@ -4,14 +4,15 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tuterritorio/core/const.dart';
-import 'package:tuterritorio/core/presentation/widgets/text_widget.dart';
+import 'package:tuterritorio/core/theme/const.dart';
+import 'package:tuterritorio/core/theme/strings_app.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/bloc/submission_bloc.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/filter_page/categories_section.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/filter_page/order_section.dart';
+import 'package:tuterritorio/main.dart';
 
-import 'const/const.dart';
+import 'utils/utils.dart';
 
 class FilterPage extends StatefulWidget {
   const FilterPage({Key? key}) : super(key: key);
@@ -38,9 +39,9 @@ class _FilterPageState extends State<FilterPage> {
                   onTap: () {
                     Navigator.maybePop(context);
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.clear,
-                    color: PRIMARY_COLOR,
+                    color: isDark(context) ? TEXT_COLOR_DARK : PRIMARY_COLOR,
                   ),
                 ),
                 Text(
