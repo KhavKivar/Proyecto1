@@ -34,7 +34,6 @@ class SubmissionRemoteDataSourceImpl implements SubmissionRemoteDataSource {
       );
 
       if (response.statusCode == 200) {
-        await Future.delayed(Duration(seconds: 3));
         return List<SubmissionModel>.from(
             json.decode(response.body).map((x) => SubmissionModel.fromJson(x)));
       } else {

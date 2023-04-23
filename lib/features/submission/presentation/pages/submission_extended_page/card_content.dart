@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:tuterritorio/core/theme/const.dart';
 
+import '../../../../../main.dart';
 import '../../widgets/card_submission_widget/tags.dart';
 
 class SubmissionContentExtended extends StatefulWidget {
@@ -68,14 +69,12 @@ class MeasureSize extends SingleChildRenderObjectWidget {
 
 class _SubmissionContentExtendedState extends State<SubmissionContentExtended> {
   Size? myChildSize = Size.zero;
-  double get bottomSpace => (MediaQuery.of(context).size.height -
-              heightSubmissionCard -
-              (myChildSize?.height ?? 0)) >
-          0
-      ? (MediaQuery.of(context).size.height -
-          heightSubmissionCard -
-          (myChildSize?.height ?? 0))
-      : 100;
+
+  double get spaceToAdd => (MediaQuery.of(context).size.height -
+      heightSubmissionCard -
+      (myChildSize?.height ?? 0));
+
+  double get bottomSpace => spaceToAdd > 0 ? spaceToAdd : 100;
 
   @override
   void initState() {
@@ -84,35 +83,35 @@ class _SubmissionContentExtendedState extends State<SubmissionContentExtended> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
-      child: Column(
-        children: [
-          MeasureSize(
-            onChange: (size) {
-              setState(() {
-                myChildSize = size;
-              });
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.title.trim(),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Text(
-                  widget.description.trim(),
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
+    return Container(
+      color: isDark(context) ? SURFACE_COLOR_DARK : BACKGROUND_COLOR,
+      child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
+          child: Column(children: [
+            MeasureSize(
+              onChange: (size) {
+                setState(() {
+                  myChildSize = size;
+                });
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.title.trim(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  Text(
+                    widget.description.trim(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: bottomSpace,
-          )
-        ],
-      ),
+            SizedBox(
+              height: bottomSpace,
+            )
+          ])),
     );
   }
 }

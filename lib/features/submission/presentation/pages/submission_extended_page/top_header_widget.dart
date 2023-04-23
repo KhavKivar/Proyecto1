@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:tuterritorio/core/theme/const.dart';
 import 'package:tuterritorio/core/theme/strings_app.dart';
+import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/main.dart';
 
 import '../../widgets/card_submission_widget/like_widget.dart';
@@ -80,7 +81,7 @@ class PlaceImgWidget extends StatefulWidget {
 
 class _PlaceImgWidgetState extends State<PlaceImgWidget> {
   get paddingBottom => lerp(
-      heightUserInfoContainer - PADDING_VERTICAL, heightUserInfoContainer - 35);
+      heightUserInfoContainer, heightUserInfoContainer - heightSwitchContainer);
   get transformScale => lerp(1, 1.3);
 
   get lerp => (a, b) {
@@ -90,6 +91,7 @@ class _PlaceImgWidgetState extends State<PlaceImgWidget> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    print(widget.percent);
     return Padding(
       padding: EdgeInsets.only(bottom: paddingBottom),
       child: Column(
@@ -107,47 +109,65 @@ class _PlaceImgWidgetState extends State<PlaceImgWidget> {
                   },
                   itemBuilder: (context, index) {
                     bool isSelected = currentIndex == index;
-                    return AnimatedContainer(
-                      duration: Duration(milliseconds: 600),
-                      margin: EdgeInsets.only(
-                          top: isSelected
-                              ? PADDING_VERTICAL / 2
-                              : PADDING_VERTICAL * 2,
-                          bottom: isSelected
-                              ? PADDING_VERTICAL / 2
-                              : PADDING_VERTICAL * 2,
-                          right: PADDING_DEFAULT),
-                      decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(color: Colors.black12, blurRadius: 10)
-                          ],
-                          borderRadius:
-                              BorderRadius.circular(BORDER_RADIUS_BIG),
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: CachedNetworkImageProvider(
-                                  widget.images[index]))),
-                    );
+                    return ImageWidget(
+                        isSelected: isSelected, url: widget.images[index]);
                   }),
             ),
           ),
-          SizedBox(
-            height: heightSwitchContainer,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(widget.images.length, (index) {
-                  bool isSelected = currentIndex == index;
-                  return AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
-                    color: isSelected ? Colors.black38 : Colors.black12,
-                    height: 3,
-                    width: isSelected ? 15 : 10,
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                  );
-                })),
+          AnimatedOpacity(
+            opacity: widget.percent < 0.15 ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 500),
+            child: SizedBox(
+              height: heightSwitchContainer,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(widget.images.length, (index) {
+                    bool isSelected = currentIndex == index;
+                    return AnimatedContainer(
+                      duration: Duration(milliseconds: 500),
+                      color: isDark(context)
+                          ? isSelected
+                              ? Colors.white
+                              : Colors.white.withOpacity(0.5)
+                          : isSelected
+                              ? Colors.black38
+                              : Colors.black12,
+                      height: 3,
+                      width: isSelected ? 15 : 10,
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                    );
+                  })),
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class ImageWidget extends StatelessWidget {
+  const ImageWidget({
+    Key? key,
+    required this.isSelected,
+    required this.url,
+  }) : super(key: key);
+
+  final bool isSelected;
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 600),
+      margin: EdgeInsets.only(
+          top: isSelected ? PADDING_VERTICAL / 2 : PADDING_VERTICAL * 2,
+          bottom: isSelected ? PADDING_VERTICAL / 2 : PADDING_VERTICAL * 2,
+          right: PADDING_DEFAULT),
+      decoration: BoxDecoration(
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
+          borderRadius: BorderRadius.circular(BORDER_RADIUS_BIG),
+          image: DecorationImage(
+              fit: BoxFit.cover, image: CachedNetworkImageProvider(url))),
     );
   }
 }

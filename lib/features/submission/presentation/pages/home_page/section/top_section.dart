@@ -16,11 +16,11 @@ class TopSection extends StatelessWidget {
             children: [
               Text(
                 textWelcome,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               Text(
                 textUserName,
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ],
           ),

@@ -83,5 +83,5 @@ const double widthOrderChip = 100;
 
 double minExtendHeader = 250;
 
-double heightSwitchContainer = 30;
+double heightSwitchContainer = 20;
 double heightUserInfoContainer = 80;

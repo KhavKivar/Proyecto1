@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:tuterritorio/core/theme/const.dart';
 import 'package:tuterritorio/features/submission/domain/entities/submission.dart';
 import 'package:tuterritorio/features/submission/presentation/pages/submission_extended_page/card_content.dart';
+import 'package:tuterritorio/main.dart';
 
 import 'top_header_widget.dart';
 
@@ -81,33 +82,49 @@ class _CardSubmissionExtendedPageState
                   tags: widget.submission.tags,
                 )),
               ]),
-          Visibility(
-            visible: showCommentWidget,
-            child: Positioned.fill(
-                top: null,
+          Positioned.fill(
+              top: null,
+              child: AnimatedOpacity(
+                opacity: showCommentWidget ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
                 child: Container(
                   height: 130,
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                  decoration: isDark(context)
+                      ? BoxDecoration(
+                          gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                        Colors.white.withOpacity(0),
-                        Colors.white70,
-                        Colors.white.withOpacity(0.7)
-                      ])),
+                            SURFACE_COLOR_DARK.withOpacity(0),
+                            SURFACE_COLOR_DARK.withOpacity(0.5),
+                            SURFACE_COLOR_DARK.withOpacity(0.8),
+                            SURFACE_COLOR_DARK,
+                          ],
+                          stops: [0.0, 0.2, 0.6, 1.0],
+                        ))
+                      : BoxDecoration(
+                          gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.white.withOpacity(0),
+                            Colors.white.withOpacity(0.5),
+                            Colors.white.withOpacity(0.8),
+                            Colors.white,
+                          ],
+                          stops: [0.0, 0.2, 0.6, 1.0],
+                        )),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      ElevatedButton(
+                      FilledButton(
                         onPressed: () {},
                         child: Row(
                           children: [
                             Text(
                               "120 Comentarios",
-                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             const SizedBox(
                               width: PADDING_VERTICAL,
@@ -120,8 +137,8 @@ class _CardSubmissionExtendedPageState
                       )
                     ],
                   ),
-                )),
-          )
+                ),
+              ))
         ],
       ),
     ));

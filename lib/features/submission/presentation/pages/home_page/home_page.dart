@@ -34,30 +34,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            final bloc = context.read<ThemeBloc>();
-            if (isDark(context)) {
-              bloc.add(ThemeChanged(theme: ThemeAppEnum.light));
-            } else {
-              bloc.add(ThemeChanged(theme: ThemeAppEnum.dark));
-            }
-          },
-          child: Icon(Icons.add),
-        ),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TopSection(),
-                SubmissionListCardWidget(),
-                BottomSection(),
-              ],
-            ),
-          ),
-        ));
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: PADDING_HORIZONTAL),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TopSection(),
+            SubmissionListCardWidget(),
+            BottomSection(),
+          ],
+        ),
+      ),
+    ));
   }
 }
 

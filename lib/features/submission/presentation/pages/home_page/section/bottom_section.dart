@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tuterritorio/core/presentation/bloc/theme_switch_bloc.dart';
+import 'package:tuterritorio/core/presentation/bloc/theme_switch_event.dart';
 import 'package:tuterritorio/core/theme/const.dart';
 import 'package:tuterritorio/core/theme/strings_app.dart';
+import 'package:tuterritorio/main.dart';
 
 class BottomSection extends StatelessWidget {
   const BottomSection({Key? key}) : super(key: key);
@@ -21,18 +25,18 @@ class BottomSection extends StatelessWidget {
             ),
           ],
         ),
-        TextButton(
-          onPressed: () {},
-          child: Text("on"),
-        ),
-        FilledButton(
-          onPressed: () {},
-          child: Text("on"),
-        ),
         OutlinedButton(
-          onPressed: () {},
-          child: Text("ds"),
-        )
+            onPressed: () {
+              final bloc = context.read<ThemeBloc>();
+              if (isDark(context)) {
+                bloc.add(ThemeChanged(theme: ThemeAppEnum.light));
+              } else {
+                bloc.add(ThemeChanged(theme: ThemeAppEnum.dark));
+              }
+            },
+            child: isDark(context)
+                ? Icon(Icons.sunny)
+                : Icon(Icons.nightlight_round))
       ],
     );
   }
